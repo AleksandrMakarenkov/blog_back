@@ -20,7 +20,6 @@ func MakeBlog() (*Blog, error) {
 		return nil, err
 	}
 
-
 	logger := log.New(os.Stderr, "SQL: ", log.Flags())
 	reformDb := reform.NewDB(db, postgresql.Dialect, reform.NewPrintfLogger(logger.Printf))
 
@@ -33,4 +32,3 @@ func MakeBlog() (*Blog, error) {
 	auth := NewAuthenticator(store, config, userRepo, comparator, sessionSaver)
 	return NewBlog(store, auth, db), nil
 }
-

@@ -8,7 +8,6 @@ import (
 )
 
 type Comparator struct {
-
 }
 
 func NewComparator() *Comparator {

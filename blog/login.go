@@ -18,10 +18,10 @@ type loginAttempt struct {
 }
 
 type Authenticator struct {
-	store sessions.Store
-	config *Config
-	userRepo *repository.UserRepository
-	comparator *password.Comparator
+	store        sessions.Store
+	config       *Config
+	userRepo     *repository.UserRepository
+	comparator   *password.Comparator
 	sessionSaver *session.Saver
 }
 
@@ -33,14 +33,13 @@ func NewAuthenticator(
 	sessionSaver *session.Saver,
 ) *Authenticator {
 	return &Authenticator{
-		store: store,
-		config: config,
-		userRepo: userRepo,
-		comparator: comparator,
+		store:        store,
+		config:       config,
+		userRepo:     userRepo,
+		comparator:   comparator,
 		sessionSaver: sessionSaver,
 	}
 }
-
 
 func (a *Authenticator) LoginHandler(writer http.ResponseWriter, req *http.Request) {
 	// parse json
