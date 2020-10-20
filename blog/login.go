@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/sessions"
-	_ "github.com/jackc/pgx/stdlib"
-	_ "gopkg.in/reform.v1"
 	"net/http"
 	"vue_back/blog/repository"
 	"vue_back/blog/service/password"

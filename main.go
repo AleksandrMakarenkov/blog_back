@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	"vue_back/blog"
+	"vue_back/blog/dependencies"
 )
 
 func main() {
 	var err error
-	blog, err := blog.MakeBlog()
+	blog, err := dependencies.MakeBlog()
 	if err != nil {
 		fmt.Println(err)
 		return

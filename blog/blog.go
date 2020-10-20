@@ -25,11 +25,11 @@ func NewBlog(
 	r := mux.NewRouter()
 	r.HandleFunc("/", Index)
 	r.HandleFunc("/login", authenticator.LoginHandler).Methods("POST")
-	//r.HandleFunc("/article", Article).Methods("POST")
 
 	return &Blog{
 		router: r,
 		store:  &store,
+		db:     db,
 	}
 }
 
@@ -49,8 +49,3 @@ func Index(writer http.ResponseWriter, req *http.Request) {
 	var b, _ = ioutil.ReadFile("./static/index.html")
 	_, _ = writer.Write(b)
 }
-
-//func Article(writer http.ResponseWriter, req *http.Request) {
-//session, _ := store.Get(req, CookieName)
-//fmt.Println(session.Values["id"])
-//}

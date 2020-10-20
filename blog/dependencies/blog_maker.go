@@ -1,20 +1,28 @@
-package blog
+package dependencies
 
 import (
 	"database/sql"
 	"fmt"
 	"github.com/gorilla/sessions"
+	_ "github.com/jackc/pgx/stdlib"
 	"gopkg.in/reform.v1"
 	"gopkg.in/reform.v1/dialects/postgresql"
 	"log"
 	"os"
+	"vue_back/blog"
 	"vue_back/blog/repository"
 	"vue_back/blog/service/password"
 	"vue_back/blog/service/session"
 )
 
-func MakeBlog() (*Blog, error) {
-	db, err := sql.Open("pgx", os.Getenv("DB_DSN"))
+func MakeBlog() (*blog.Blog, error) {
+	config, err := blog.NewConfig(os.Getenv(blog.SecretName), os.Getenv("DB_DSN"), nil, nil)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	db, err := sql.Open("pgx", config.DSN)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
@@ -23,12 +31,15 @@ func MakeBlog() (*Blog, error) {
 	logger := log.New(os.Stderr, "SQL: ", log.Flags())
 	reformDb := reform.NewDB(db, postgresql.Dialect, reform.NewPrintfLogger(logger.Printf))
 
-	config := NewConfig(os.Getenv(SecretName), db, reformDb)
+	config.DB = db
+	config.Reform = reformDb
+
 	userRepo := repository.NewUserRepository(reformDb)
 
 	store := sessions.NewCookieStore([]byte(config.Secret))
 	comparator := password.NewComparator()
 	sessionSaver := session.NewSaver(store)
-	auth := NewAuthenticator(store, config, userRepo, comparator, sessionSaver)
-	return NewBlog(store, auth, db), nil
+	auth := blog.NewAuthenticator(store, config, userRepo, comparator, sessionSaver)
+
+	return blog.NewBlog(store, auth, db), nil
 }
