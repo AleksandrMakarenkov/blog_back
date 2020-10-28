@@ -11,7 +11,8 @@ import (
 )
 
 func MakeReform() (*reform.DB, error) {
-	config, err := blog.NewConfig(os.Getenv(blog.SecretName), os.Getenv("DB_DSN"), nil, nil)
+	env := os.Getenv("BLOG_ENV")
+	config, err := blog.NewConfig(os.Getenv(blog.EnvNameOfSecret), os.Getenv("DB_DSN"), nil, nil, env)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err

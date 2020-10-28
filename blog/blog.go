@@ -9,18 +9,20 @@ import (
 	"net/http"
 )
 
-const SecretName = "BLOG_SECRET"
+const EnvNameOfSecret = "BLOG_SECRET"
 
 type Blog struct {
 	router *mux.Router
 	store  *sessions.Store
 	db     *sql.DB
+	config *Config
 }
 
 func NewBlog(
 	store sessions.Store,
 	authenticator *Authenticator,
 	db *sql.DB,
+	config *Config,
 ) *Blog {
 	r := mux.NewRouter()
 	r.HandleFunc("/", Index)
@@ -30,12 +32,13 @@ func NewBlog(
 		router: r,
 		store:  &store,
 		db:     db,
+		config: config,
 	}
 }
 
 func (blog *Blog) Run() {
 	var err error
-	err = http.ListenAndServe(":9090", blog.router)
+	err = http.ListenAndServe(fmt.Sprintf(":%d",blog.config.port), blog.router)
 	if err != nil {
 		fmt.Println(err)
 	}

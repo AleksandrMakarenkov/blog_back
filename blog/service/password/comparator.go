@@ -22,6 +22,11 @@ type params struct {
 	keyLength   uint32
 }
 
+// Compare compares two strings, where first is string from user input (e.g login form),
+// and second is your hash string in special format (see Hash), which is stored somewhere in database.
+// It returns true when they are equal, false otherwise.
+// Error will be returned ONLY if something went wrong, so if strings are not equal it will return "false" as a result
+// and nil as error because everything was fine during comparison process.
 func (c *Comparator) Compare(input string, storedHash string) (bool, error) {
 	p := &params{
 		memory:      32 * 1024,
@@ -43,7 +48,7 @@ func (c *Comparator) Compare(input string, storedHash string) (bool, error) {
 	// get input hash
 	inputHash := argon2.IDKey([]byte(input), salt, p.iterations, p.memory, p.parallelism, p.keyLength)
 	if subtle.ConstantTimeCompare(hash, inputHash) != 1 {
-		return false, err
+		return false, nil
 	}
 	return true, nil
 }

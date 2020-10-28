@@ -16,7 +16,8 @@ import (
 )
 
 func MakeBlog() (*blog.Blog, error) {
-	config, err := blog.NewConfig(os.Getenv(blog.SecretName), os.Getenv("DB_DSN"), nil, nil)
+	env := os.Getenv("BLOG_ENV")
+	config, err := blog.NewConfig(os.Getenv(blog.EnvNameOfSecret), os.Getenv("DB_DSN"), nil, nil, env)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
@@ -41,5 +42,5 @@ func MakeBlog() (*blog.Blog, error) {
 	sessionSaver := session.NewSaver(store)
 	auth := blog.NewAuthenticator(store, config, userRepo, comparator, sessionSaver)
 
-	return blog.NewBlog(store, auth, db), nil
+	return blog.NewBlog(store, auth, db, config), nil
 }
