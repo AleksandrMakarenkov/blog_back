@@ -41,7 +41,7 @@ func main() {
 		return
 	}
 
-	user := model.User{
+	user := model.Account{
 		Email:    email,
 		Password: password,
 		Role:     "admin",

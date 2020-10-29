@@ -16,7 +16,7 @@ func NewSaver(store sessions.Store) *Saver {
 	return &Saver{store: store}
 }
 
-func (s *Saver) Save(user *model.User, req *http.Request, writer http.ResponseWriter) error {
+func (s *Saver) Save(user *model.Account, req *http.Request, writer http.ResponseWriter) error {
 	session, err := s.store.Get(req, CookieName)
 	if err != nil {
 		return err

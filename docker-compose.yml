@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+  api:
+    build: .
+    ports:
+      - "9090:9090"
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: blog
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: blog
+    volumes:
+      - db-data:/var/lib/postgresql/data/
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+volumes:
+  db-data:

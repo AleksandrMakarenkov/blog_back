@@ -14,12 +14,12 @@ func NewUserRepository(reform *reform.DB) *UserRepository {
 	return &UserRepository{reform: reform}
 }
 
-func (u *UserRepository) FindByEmail(email string) (*model.User, error) {
-	user := model.User{}
-	err := u.reform.FindOneTo(&user, "email", email)
+func (u *UserRepository) FindByEmail(email string) (*model.Account, error) {
+	account := model.Account{}
+	err := u.reform.FindOneTo(&account, "email", email)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
 	}
-	return &user, nil
+	return &account, nil
 }
