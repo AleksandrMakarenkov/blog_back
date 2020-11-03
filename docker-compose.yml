@@ -1,20 +1,30 @@
 version: "3.8"
 services:
   api:
-    build: .
+    image: vue_back_api
     ports:
       - "9090:9090"
+    environment:
+        POSTGRES_DB: blog
+        POSTGRES_USER: /run/secrets/postgres_user
+        POSTGRES_PASSWORD: /run/secrets/postgres_password
   db:
     image: postgres
     restart: always
-    ports:
-      - "5432:5432"
     environment:
-      POSTGRES_USER: blog
-      POSTGRES_PASSWORD: admin123
       POSTGRES_DB: blog
+      POSTGRES_USER: /run/secrets/postgres_user
+      POSTGRES_PASSWORD: /run/secrets/postgres_password
     volumes:
       - db-data:/var/lib/postgresql/data/
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    secrets:
+      - postgres_user
+      - postgres_password
 volumes:
   db-data:
+secrets:
+  postgres_user:
+    external: true
+  postgres_password:
+    external: true

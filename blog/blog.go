@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
-	"io/ioutil"
 	"net/http"
 )
 
@@ -49,6 +48,7 @@ func (blog *Blog) CloseDB() error {
 }
 
 func Index(writer http.ResponseWriter, req *http.Request) {
-	var b, _ = ioutil.ReadFile("./static/index.html")
-	_, _ = writer.Write(b)
+	//var b, _ = ioutil.ReadFile("./static/index.html")
+
+	_, _ = writer.Write([]byte("OK"))
 }

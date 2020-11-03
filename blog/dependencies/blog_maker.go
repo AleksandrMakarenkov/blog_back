@@ -17,7 +17,11 @@ import (
 
 func MakeBlog() (*blog.Blog, error) {
 	env := os.Getenv("BLOG_ENV")
-	config, err := blog.NewConfig(os.Getenv(blog.EnvNameOfSecret), os.Getenv("DB_DSN"), nil, nil, env)
+	dbName := os.Getenv("POSTGRES_DB")
+	dbUser := os.Getenv("POSTGRES_USER")
+	dbPassword := os.Getenv("POSTGRES_PASSWORD")
+	dsn := fmt.Sprintf("postgresql://%s:%s@db/%s", dbUser, dbPassword, dbName)
+	config, err := blog.NewConfig(os.Getenv(blog.EnvNameOfSecret), dsn, nil, nil, env)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
