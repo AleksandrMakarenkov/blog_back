@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   api:
-    image: vue_back_api
+    image: graphninja/blog_api
     ports:
       - "9090:9090"
     environment:
