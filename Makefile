@@ -1,12 +1,10 @@
-ID = $(shell docker ps -aqf name=blog)
+#ID = $(shell docker ps -aqf name=blog)
 
 build:
-	docker build --tag blog:0.1 .
-run:
-	docker run --publish 9090:9090 --detach --name blog blog:0.1
+	docker build --tag vue_back_api .
+deploy:
+	docker stack deploy --compose-file=docker-compose.yml blog
 stop:
-	docker stop $(ID)
-rm:
-	docker rm $(ID)
-log:
-	docker logs $(ID)
+	docker stack rm blog
+#log:
+#	docker logs $(ID)

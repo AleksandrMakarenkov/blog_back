@@ -7,6 +7,7 @@ import (
 	_ "github.com/jackc/pgx/stdlib"
 	"gopkg.in/reform.v1"
 	"gopkg.in/reform.v1/dialects/postgresql"
+	"io/ioutil"
 	"log"
 	"os"
 	"vue_back/blog"
@@ -18,9 +19,20 @@ import (
 func MakeBlog() (*blog.Blog, error) {
 	env := os.Getenv("BLOG_ENV")
 	dbName := os.Getenv("POSTGRES_DB")
-	dbUser := os.Getenv("POSTGRES_USER")
-	dbPassword := os.Getenv("POSTGRES_PASSWORD")
-	dsn := fmt.Sprintf("postgresql://%s:%s@db/%s", dbUser, dbPassword, dbName)
+
+	dbUser, err := ioutil.ReadFile("/run/secrets/postgres_user")
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	dbPassword, err := ioutil.ReadFile("/run/secrets/postgres_password")
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	dsn := fmt.Sprintf( "postgresql://%s:%s@db/%s", string(dbUser), string(dbPassword), dbName)
 	config, err := blog.NewConfig(os.Getenv(blog.EnvNameOfSecret), dsn, nil, nil, env)
 	if err != nil {
 		fmt.Println(err)

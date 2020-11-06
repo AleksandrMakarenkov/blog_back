@@ -6,15 +6,18 @@ services:
       - "9090:9090"
     environment:
         POSTGRES_DB: blog
-        POSTGRES_USER: /run/secrets/postgres_user
-        POSTGRES_PASSWORD: /run/secrets/postgres_password
+    depends_on:
+      - db
+    secrets:
+      - postgres_user
+      - postgres_password
   db:
     image: postgres
     restart: always
     environment:
       POSTGRES_DB: blog
-      POSTGRES_USER: /run/secrets/postgres_user
-      POSTGRES_PASSWORD: /run/secrets/postgres_password
+      POSTGRES_USER_FILE: /run/secrets/postgres_user
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
     volumes:
       - db-data:/var/lib/postgresql/data/
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
